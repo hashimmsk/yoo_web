@@ -1,0 +1,10 @@
+name: swimmer-plot
+title:
+username: wonsukyoo
+account: wonsukyoo
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16942931
+bundleId: 11733594
+url: https://wonsukyoo.shinyapps.io/swimmer-plot/
+version: 1
