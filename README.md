@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wonsuk Yoo, PhD — Academic Website
 
-## Getting Started
+Professional academic website for Dr. Wonsuk Yoo, Research Associate Professor of Biostatistics at the University of Miami School of Nursing and Health Studies.
 
-First, run the development server:
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router, static export)
+- **Styling**: Tailwind CSS 4
+- **Language**: TypeScript
+- **Deployment**: Render (static site) or any static hosting
+
+## Local Development
 
 ```bash
+cd website
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+The static site is exported to the `out/` directory.
 
-To learn more about Next.js, take a look at the following resources:
+## Site Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Route | Page |
+|---|---|
+| `/` | Home — hero, research focus, tools, stats |
+| `/about` | Biography, education, experience, awards, memberships |
+| `/research` | Research areas, funded projects, invited lectures |
+| `/publications` | 55+ publications with search and year filter |
+| `/tools` | Overview of research tools |
+| `/tools/anova` | ANOVA Mean Comparison Tool (embedded Shiny app) |
+| `/tools/swimmer-plot` | Swimmer Plot Generator (embedded Shiny app) |
+| `/contact` | Contact info and professional links |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploying to Render
 
-## Deploy on Vercel
+1. Push the repository to GitHub
+2. Create a new **Static Site** on Render
+3. Set:
+   - **Root Directory**: `website`
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `out`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploying Shiny Apps
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The ANOVA and Swimmer Plot apps are R Shiny applications in `anova_graphs/`. To deploy them:
+
+```r
+# Install rsconnect
+install.packages("rsconnect")
+
+# Configure your shinyapps.io account
+rsconnect::setAccountInfo(name='YOUR_ACCOUNT', token='YOUR_TOKEN', secret='YOUR_SECRET')
+
+# Deploy each app
+rsconnect::deployApp('anova_graphs/anova_app')
+rsconnect::deployApp('anova_graphs/swimmer_app')
+```
+
+After deployment, update the URLs in `src/lib/constants.ts`:
+
+```typescript
+export const SHINY_APP_URLS = {
+  anova: "https://YOUR_ACCOUNT.shinyapps.io/anova_app/",
+  swimmerPlot: "https://YOUR_ACCOUNT.shinyapps.io/swimmer_app/",
+};
+```
+
+## Updating Content
+
+- **Profile data**: `src/data/profile.ts`
+- **Publications**: `src/data/publications.ts`
+- **Research areas & grants**: `src/data/research.ts`
+- **Tool descriptions**: `src/data/tools.ts`
+- **Shiny app URLs**: `src/lib/constants.ts`
+
+## Project Structure
+
+```
+website/
+├── src/
+│   ├── app/           # Next.js pages (file-based routing)
+│   ├── components/    # Reusable React components
+│   ├── data/          # Structured content data
+│   └── lib/           # Constants and utilities
+├── public/            # Static assets
+├── next.config.ts     # Next.js configuration (static export)
+└── package.json
+```
